@@ -8,6 +8,10 @@
 
 #include <iostream>
 #include <fstream>
+#include <chrono>
+#include <ctime>
+#include <time.h>
+#include <iomanip>
 
 namespace
 {
@@ -24,7 +28,7 @@ namespace
             _ASSERTE(errCode1 == GL_NO_ERROR);
     }
 
-    std::string readContentsOfFile(std::string filename) {
+    std::string ReadContentsOfFile(std::string filename) {
         std::ifstream file(filename);
         if (!file.is_open()) {
             return std::string();
@@ -32,6 +36,53 @@ namespace
         std::istreambuf_iterator<char> eos;
         std::string s(std::istreambuf_iterator<char>(file), eos);
         return s;
+    }
+
+    //Variadic template usage for typesafe form of printf.
+    void TPrintf(std::ostream &file, const char* format) // base function
+    {
+        file << format;
+    }
+
+    template<typename T, typename... Targs>
+    void TPrintf(std::ostream &file, const char* format, T value, Targs... Fargs) // recursive variadic function
+    {
+        //Now print the message with arguments
+        for (; *format != '\0'; format++) {
+            if (*format == '%') {
+                file << value;
+                TPrintf(file, format + 1, Fargs...); // recursive call
+                return;
+            }
+            file << *format;
+        }
+    }
+
+    template<class... T>
+    bool GLLogs(const char *message, T... params)
+    {
+        std::string fileName = "C:\\Temp\\ogl4.log";
+        std::ofstream file(fileName);
+        if (!file.is_open())
+        {
+            std::cerr << "ERROR: Could not open " << fileName.c_str() << " for writing" << std::endl;
+            return false;
+        }
+
+        //Get time from system
+        //std::time_t rawTime = std::time(nullptr);
+        //std::tm timeBuf;
+        //char timeStr[32];
+        //localtime_s(&timeBuf, &rawTime);
+        //asctime_s(timeStr, sizeof timeStr, &timeBuf);
+        //file << timeStr << std::endl;
+        std::chrono::time_point<std::chrono::system_clock> currentTime = std::chrono::system_clock::now();
+        time_t asciiTime = std::chrono::system_clock::to_time_t(currentTime);
+        file << ctime(&asciiTime) << std::endl;
+
+        TPrintf(file, message, params...);
+
+        return true;
     }
 };
 int main()
@@ -61,8 +112,7 @@ int main()
     std::string renderer = std::string(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
     std::string version  = std::string(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
 
-    std::cout << "Renderer: " << renderer.c_str() << std::endl;
-    std::wcout << "Version: " << version.c_str() << std::endl;
+    GLLogs("Renderer is %s and GL Version is %s", renderer.c_str(), version.c_str());
 
     //Now lets render something
     glEnable(GL_DEPTH_TEST); //enable depth testing.
@@ -93,17 +143,17 @@ int main()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, NULL); //Defines layout of the mesh. 3 mean vec3
 
     //Setup the vertex shader and compile and use.
-    std::string vertexShader = readContentsOfFile("simple.vert");
+    std::string vertexShader = ReadContentsOfFile("simple.vert");
     const char* vertShader   = vertexShader.c_str();
-    const GLint vertShaderSz = vertexShader.size();
+    const GLint vertShaderSz = static_cast<GLint>(vertexShader.size());
     GLuint vs = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vs, 1, &vertShader, &vertShaderSz);
     glCompileShader(vs);
 
     //Setup the fragment shader and compile and use.
-    std::string fragmentShader = readContentsOfFile("simple.frag");
+    std::string fragmentShader = ReadContentsOfFile("simple.frag");
     const char* fragShader = fragmentShader.c_str();
-    const GLint fragShaderSz = fragmentShader.size();
+    const GLint fragShaderSz = static_cast<GLint>(fragmentShader.size());
     GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fs, 1, &fragShader, &fragShaderSz);
     glCompileShader(fs);

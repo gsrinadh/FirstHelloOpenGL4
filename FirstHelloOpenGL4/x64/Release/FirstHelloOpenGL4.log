@@ -1,0 +1,41 @@
+﻿Build started 8/18/2016 12:01:11 PM.
+     1>Project "C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\FirstHelloOpenGL4\FirstHelloOpenGL4.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\x64\Release\FirstHelloOpenGL4.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:"C:\Tools\OpenGL\glfw-3.2\src\Release" /LIBPATH:"C:\Tools\OpenGL\glew-1.13.0\lib\Release\Win32" glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\x64\Release\FirstHelloOpenGL4.pdb" /SUBSYSTEM:CONSOLE /OPT:REF /OPT:ICF /LTCG:incremental /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\x64\Release\FirstHelloOpenGL4.lib" /MACHINE:X64 x64\Release\FirstHelloOpenGL4.obj
+         x64\Release\stdafx.obj
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glGetError
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol glfwInit
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol glfwCreateWindow
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol glfwTerminate
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol glfwMakeContextCurrent
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glewExperimental
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glewInit
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glGetString
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glEnable
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glDepthFunc
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewGenBuffers
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewBindBuffer
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewBufferData
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewGenVertexArrays
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewBindVertexArray
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewCreateShader
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewShaderSource
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewCompileShader
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewCreateProgram
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewAttachShader
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewLinkProgram
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol glfwWindowShouldClose
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glClear
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glClearColor
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glDrawArrays
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol glfwPollEvents
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol glfwSwapBuffers
+     1>C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\x64\Release\FirstHelloOpenGL4.exe : fatal error LNK1120: 30 unresolved externals
+     1>Done Building Project "C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\FirstHelloOpenGL4\FirstHelloOpenGL4.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.58

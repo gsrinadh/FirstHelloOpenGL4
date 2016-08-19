@@ -1,0 +1,36 @@
+﻿Build started 8/18/2016 12:01:40 PM.
+     1>Project "C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\FirstHelloOpenGL4\FirstHelloOpenGL4.vcxproj" on node 2 (Build target(s)).
+     1>Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\x64\Debug\FirstHelloOpenGL4.exe" /INCREMENTAL /NOLOGO /LIBPATH:"C:\Tools\OpenGL\glew-1.13.0\lib\Debug\Win32" /LIBPATH:"C:\Tools\OpenGL\glfw-3.2\src\Debug" glew32d.lib glfw3.lib opengl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /Debug /PDB:"C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\x64\Debug\FirstHelloOpenGL4.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\x64\Debug\FirstHelloOpenGL4.lib" /MACHINE:X64 x64\Debug\FirstHelloOpenGL4.obj
+         x64\Debug\stdafx.obj
+     1>FirstHelloOpenGL4.obj : error LNK2019: unresolved external symbol __imp_glewInit referenced in function main
+     1>FirstHelloOpenGL4.obj : error LNK2019: unresolved external symbol glfwInit referenced in function main
+     1>FirstHelloOpenGL4.obj : error LNK2019: unresolved external symbol glfwTerminate referenced in function main
+     1>FirstHelloOpenGL4.obj : error LNK2019: unresolved external symbol glfwCreateWindow referenced in function main
+     1>FirstHelloOpenGL4.obj : error LNK2019: unresolved external symbol glfwWindowShouldClose referenced in function main
+     1>FirstHelloOpenGL4.obj : error LNK2019: unresolved external symbol glfwPollEvents referenced in function main
+     1>FirstHelloOpenGL4.obj : error LNK2019: unresolved external symbol glfwMakeContextCurrent referenced in function main
+     1>FirstHelloOpenGL4.obj : error LNK2019: unresolved external symbol glfwSwapBuffers referenced in function main
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewBindBuffer
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewBufferData
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewGenBuffers
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewAttachShader
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewCompileShader
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewCreateProgram
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewCreateShader
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewEnableVertexAttribArray
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewLinkProgram
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewShaderSource
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewUseProgram
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewVertexAttribPointer
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewBindVertexArray
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp___glewGenVertexArrays
+     1>FirstHelloOpenGL4.obj : error LNK2001: unresolved external symbol __imp_glewExperimental
+     1>C:\Tools\OpenGL\glew-1.13.0\lib\Debug\Win32\glew32d.lib : warning LNK4272: library machine type 'X86' conflicts with target machine type 'x64'
+     1>C:\Tools\OpenGL\glfw-3.2\src\Debug\glfw3.lib : warning LNK4272: library machine type 'X86' conflicts with target machine type 'x64'
+     1>C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\x64\Debug\FirstHelloOpenGL4.exe : fatal error LNK1120: 23 unresolved externals
+     1>Done Building Project "C:\Users\310148346\Documents\Visual Studio 2015\Projects\HelloOpenGL4\FirstHelloOpenGL4\FirstHelloOpenGL4.vcxproj" (Build target(s)) -- FAILED.
+
+Build FAILED.
+
+Time Elapsed 00:00:00.69
