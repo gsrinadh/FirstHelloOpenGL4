@@ -10,11 +10,12 @@
 #include <fstream>
 #include <chrono>
 #include <ctime>
-#include <time.h>
-#include <iomanip>
 
 namespace
 {
+    std::ofstream g_infoLogger, g_errorLogger;
+    int g_WindowsWt = 640, g_WindowsHt = 480;
+
     template<typename T, std::size_t N>
     constexpr std::size_t arraySize(T(&)[N]) noexcept //reference to array of type T
     {
@@ -41,7 +42,7 @@ namespace
     //Variadic template usage for typesafe form of printf.
     void TPrintf(std::ostream &file, const char* format) // base function
     {
-        file << format;
+        file << format << std::endl;
     }
 
     template<typename T, typename... Targs>
@@ -50,6 +51,7 @@ namespace
         //Now print the message with arguments
         for (; *format != '\0'; format++) {
             if (*format == '%') {
+                ++format;
                 file << value;
                 TPrintf(file, format + 1, Fargs...); // recursive call
                 return;
@@ -59,34 +61,125 @@ namespace
     }
 
     template<class... T>
-    bool GLLogs(const char *message, T... params)
+    bool LogInfo(const char *message, T... params)
     {
-        std::string fileName = "C:\\Temp\\ogl4.log";
-        std::ofstream file(fileName);
-        if (!file.is_open())
-        {
-            std::cerr << "ERROR: Could not open " << fileName.c_str() << " for writing" << std::endl;
-            return false;
-        }
-
         //Get time from system
-        //std::time_t rawTime = std::time(nullptr);
-        //std::tm timeBuf;
-        //char timeStr[32];
-        //localtime_s(&timeBuf, &rawTime);
-        //asctime_s(timeStr, sizeof timeStr, &timeBuf);
-        //file << timeStr << std::endl;
-        std::chrono::time_point<std::chrono::system_clock> currentTime = std::chrono::system_clock::now();
-        time_t asciiTime = std::chrono::system_clock::to_time_t(currentTime);
-        file << ctime(&asciiTime) << std::endl;
+        //std::chrono::time_point<std::chrono::system_clock> currentTime = std::chrono::system_clock::now();
+        //time_t asciiTime = std::chrono::system_clock::to_time_t(currentTime);
+        //g_infoLogger << std::endl << ctime(&asciiTime);
 
-        TPrintf(file, message, params...);
+        TPrintf(g_infoLogger, message, params...);
 
         return true;
     }
+
+    template<class... T>
+    bool LogError(const char *message, T... params)
+    {
+        //Get time from system
+        std::chrono::time_point<std::chrono::system_clock> currentTime = std::chrono::system_clock::now();
+        time_t asciiTime = std::chrono::system_clock::to_time_t(currentTime);
+        g_errorLogger << ctime(&asciiTime) << std::endl;
+
+        TPrintf(g_errorLogger, message, params...);
+        TPrintf(std::cerr, message, params...);
+
+        return true;
+    }
+
+    void LogGLParams()
+    {
+        GLenum params[] = {
+            GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS,
+            GL_MAX_CUBE_MAP_TEXTURE_SIZE,
+            GL_MAX_DRAW_BUFFERS,
+            GL_MAX_FRAGMENT_UNIFORM_COMPONENTS,
+            GL_MAX_TEXTURE_IMAGE_UNITS,
+            GL_MAX_TEXTURE_SIZE,
+            GL_MAX_VARYING_FLOATS,
+            GL_MAX_VERTEX_ATTRIBS,
+            GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS,
+            GL_MAX_VERTEX_UNIFORM_COMPONENTS,
+            GL_MAX_VIEWPORT_DIMS,
+            GL_STEREO,
+        };
+        const char* names[] = {
+            "GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS",
+            "GL_MAX_CUBE_MAP_TEXTURE_SIZE",
+            "GL_MAX_DRAW_BUFFERS",
+            "GL_MAX_FRAGMENT_UNIFORM_COMPONENTS",
+            "GL_MAX_TEXTURE_IMAGE_UNITS",
+            "GL_MAX_TEXTURE_SIZE",
+            "GL_MAX_VARYING_FLOATS",
+            "GL_MAX_VERTEX_ATTRIBS",
+            "GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS",
+            "GL_MAX_VERTEX_UNIFORM_COMPONENTS",
+            "GL_MAX_VIEWPORT_DIMS",
+            "GL_STEREO",
+        };
+
+        LogInfo("GL Context Params:\n");
+        size_t len = arraySize(params);
+        for (size_t i = 0; i < len-2; ++i)
+        {
+                int v = 0;
+                glGetIntegerv(params[i], &v);
+                LogInfo("%s %i\n", names[i], v);
+        }
+
+        // others
+        int v[] = { 0, 0 };
+        glGetIntegerv(params[len-2], v);
+        LogInfo("%s %i %i\n", names[len - 2], v[0], v[1]);
+        unsigned char s = 0;
+        glGetBooleanv(params[len - 1], &s);
+        LogInfo("%s %i\n", names[len - 1], (unsigned int)s);
+        LogInfo("-----------------------------\n");
+    }
+
+    bool StartLoggers()
+    {
+        std::string infoFileName = "C:\\Temp\\ogl4.log";
+        //std::ofstream file(fileName);
+        g_infoLogger.open(infoFileName);
+        if (!g_infoLogger.is_open())
+        {
+            std::cerr << "ERROR: Could not open info logger " << infoFileName.c_str() << " for writing" << std::endl;
+            return false;
+        }
+
+        std::string errorFileName = "C:\\Temp\\errors.log";
+        g_errorLogger.open(errorFileName);
+        if (!g_errorLogger.is_open())
+        {
+            std::cerr << "ERROR: Could not open error logger " << errorFileName.c_str() << " for writing" << std::endl;
+            return false;
+        }
+
+        return true;
+    }
+
+    void GlfwErrorCallback(int error, const char* desc)
+    {
+        LogError("GLFW_ERROR: code %i msg: %s\n", error, desc);
+    }
+
+    void GlfwWindowSizeCallback(GLFWwindow *window, int width, int height)
+    {
+        g_WindowsHt = height;
+        g_WindowsWt = width;
+
+        LogInfo( "Window size changed to %i %i", width, height);
+    }
 };
+
 int main()
 {
+    StartLoggers();
+
+    LogInfo("Starting GLFW\n%s\n", glfwGetVersionString());
+    glfwSetErrorCallback(GlfwErrorCallback);
+
     //Start GL context and a window using GLFW helper library
     if (!glfwInit())
     {
@@ -94,7 +187,13 @@ int main()
         return 1;
     }
 
-    GLFWwindow* window = glfwCreateWindow(640, 480, "Hello Srinadh's Triangle", NULL, NULL);
+    //Full screen rendering on primary monitor
+    //GLFWmonitor* mon = glfwGetPrimaryMonitor ();
+    //const GLFWvidmode* vmode = glfwGetVideoMode (mon);
+    //GLFWwindow* window = glfwCreateWindow (
+    //vmode->width, vmode->height, "Extended GL Init", mon, NULL
+    //);
+    GLFWwindow* window = glfwCreateWindow(g_WindowsWt, g_WindowsHt, "Hello Srinadh's Triangle", NULL, NULL);
     if (!window)
     {
         std::cerr << "ERROR: Could not open window in GLFW3\n";
@@ -102,8 +201,13 @@ int main()
         return 1;
     }
 
+    //Set callback when windows size changes.
+    glfwSetWindowSizeCallback(window, GlfwWindowSizeCallback);
+
     glfwMakeContextCurrent(window);
 
+    //Limit Anti-aliasing sample size to 4x4 to minimize expensive smoothing operation.
+    glfwWindowHint(GLFW_SAMPLES, 4);
     //Start GLEW extension handler
     glewExperimental = GL_TRUE;
     glewInit();
@@ -112,7 +216,9 @@ int main()
     std::string renderer = std::string(reinterpret_cast<const char *>(glGetString(GL_RENDERER)));
     std::string version  = std::string(reinterpret_cast<const char *>(glGetString(GL_VERSION)));
 
-    GLLogs("Renderer is %s and GL Version is %s", renderer.c_str(), version.c_str());
+    LogInfo("Renderer is %s and GL Version is %s", renderer.c_str(), version.c_str());
+
+    LogGLParams();
 
     //Now lets render something
     glEnable(GL_DEPTH_TEST); //enable depth testing.
@@ -170,6 +276,8 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         glClearColor(0.2f, 0.2f, 0.2f, 1.0f);
 
+        glViewport(0, 0, g_WindowsWt, g_WindowsHt);
+
         glUseProgram(shaderProgram);
         glBindVertexArray(vao);
 
@@ -177,6 +285,10 @@ int main()
         glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
         // Update other events like input handling
         glfwPollEvents();
+        if (GLFW_PRESS == glfwGetKey(window, GLFW_KEY_ESCAPE)) 
+        {
+            glfwSetWindowShouldClose(window, 1);
+        }
         // Put the stuff we've been drawing onto the display.
         glfwSwapBuffers(window);
     }
